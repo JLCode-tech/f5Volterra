@@ -5,6 +5,14 @@ terraform {
       version = "0.1.0"
     }
   }
+  backend "remote" {
+    hostname = "app.terraform.io"
+    organization = "f5terracloud"
+
+    workspaces {
+      name = "f5Volterra"
+    }
+  }
 }
 
 provider "volterra" {
