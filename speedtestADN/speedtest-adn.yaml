@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: speedtest.j-lucia
+  labels:
+    app: speedtest.j-lucia
+    ves.io/app_type: speedtest-adn
+  annotations:
+    ves.io/workload-flavor: large
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: speedtest.j-lucia
+  template:
+    metadata:
+      labels:
+        app: speedtest.j-lucia
+    spec:
+      containers:
+      - image: docker.io/madhukar32/libre-speedtest-re:v3
+      #- image: ghcr.io/linuxserver/librespeed
+        name: speedtest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: WEBPORT
+          value: "8080"
+        - name: MODE
+          value: "frontend"
+        volumeMounts:
+        - name: config-volume
+          mountPath: /speedtest-conf/
+        imagePullPolicy: Always
+      volumes:
+      - name: config-volume
+        configMap:
+          name: servers-conf
+          items:
+          - key: servers.json
+            path: servers.json
+            mode: 0600
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: speedtest
+  labels:
+    ves.io/app_type: speedtest-adn
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+  selector:
+    app: speedtest.j-lucia
+---
+apiVersion: v1
+data:
+  servers.json: |
+    [
+        {
+            "name": "Jarrod Home",
+            "server" :"//speedtest.ves.apcjf5sa.co/",
+            "dlURL" :"garbage.php",
+            "ulURL" :"empty.php",
+            "pingURL" :"empty.php",
+            "getIpURL" :"getIP.php"
+        },
+        {
+            "name": "Jarrod  APAC East",
+            "server" :"//speedtest-apac-east.speedtest.ves.apcjf5sa.co/",
+            "dlURL" :"garbage.php",
+            "ulURL" :"empty.php",
+            "pingURL" :"empty.php",
+            "getIpURL" :"getIP.php"
+        }
+    ]
+kind: ConfigMap
+metadata:
+  name: servers-conf

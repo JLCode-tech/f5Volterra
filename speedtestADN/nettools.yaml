@@ -1,0 +1,37 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: nettools-web-svc
+spec:
+#  type: LoadBalancer
+  selector:
+    app: nettools-web.j-lucia
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+
+ 
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nettools-web-deploy
+  labels:
+    app: nettools-web.j-lucia
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nettools-web.j-lucia
+  template:
+    metadata:
+      labels:
+        app: nettools-web.j-lucia
+    spec:
+     containers:
+      - name: nettools
+        image: praqma/network-multitool
+        ports:
+        - containerPort: 80

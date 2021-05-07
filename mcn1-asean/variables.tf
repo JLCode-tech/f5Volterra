@@ -7,8 +7,6 @@ variable "api_url" {
 
 # This points the absolute path of the api credentials file you downloaded from Volterra
 variable "api_p12_file" {
-  #default = "/mnt/c/Users/lucia/Downloads/f5-apac-sp.console.ves.volterra.io.api-creds.p12"
-  default = "/mnt/c/Users/lucia/Documents/git_working/Volterra/f5-apac-sp.console.ves.volterra.io.api-creds.p12"
 }
 
 # Below is an option to pass access key and secret key as you probably don't want to save it in a file
@@ -21,15 +19,15 @@ variable "namespace" {
 }
 
 variable "site_name" {
-  default = "mcn"
+  default = "branch-0-asean"
 }
 
 variable "region" {
-  default = "ap-southeast-2"
+  default = "ap-east-1"
 }
 
 variable "az_name" {
-    default = "ap-southeast-2a"
+    default = "ap-east-1a"
 }
 
 variable "ssh_key" {
@@ -37,7 +35,7 @@ variable "ssh_key" {
 }
 
 variable "credentials" {
-  default = "f5-apac-sa-aws"
+  default = "apcj-aws-asean-region"
 }
 
 variable "instance_type" {
